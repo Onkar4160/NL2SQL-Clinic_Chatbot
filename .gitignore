@@ -1,0 +1,18 @@
+# Environments
+.env
+venv/
+.venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Agent/VS Code Cache
+b8627d7e14a93b64/
+.vscode/
+
+# Test scripts (not required for submission)
+test_all_questions.py
