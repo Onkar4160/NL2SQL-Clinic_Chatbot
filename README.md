@@ -8,7 +8,7 @@
 
 ```bash
 # 1. Clone & enter the project
-cd NL2SQL
+cd NL2SQL-Clinic-Chatbot
 
 # 2. Create virtual environment
 python -m venv venv
@@ -19,7 +19,7 @@ venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 
 # 4. Configure environment
-copy .env.example .env
+copy .env.example and create .env
 # Edit .env → paste your GOOGLE_API_KEY
 
 # 5. Create & populate the database
@@ -30,7 +30,7 @@ python seed_memory.py
 
 # 7. Start the server
 python main.py
-# → Server runs at http://localhost:8000
+# → Server runs at http://localhost:8000/docs
 ```
 
 ---
