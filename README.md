@@ -8,7 +8,7 @@
 
 ```bash
 # 1. Clone & enter the project
-cd NL2SQL-Clinic-Chatbot
+cd NL2SQL-Clinic_Chatbot
 
 # 2. Create virtual environment
 python -m venv venv
