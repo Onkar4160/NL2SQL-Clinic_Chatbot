@@ -26,12 +26,10 @@ from vanna_setup import get_agent_memory
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
 # Question → SQL pairs organised by category
-# ---------------------------------------------------------------------------
 
 SEED_PAIRS: list[dict[str, str]] = [
-    # ---- Patient Queries ---------------------------------------------------
+    # Patient Queries
     {
         "question": "How many patients do we have?",
         "sql": "SELECT COUNT(*) AS total_patients FROM patients",
@@ -45,7 +43,7 @@ SEED_PAIRS: list[dict[str, str]] = [
         "sql": "SELECT gender, COUNT(*) AS count FROM patients GROUP BY gender",
     },
 
-    # ---- Doctor Queries ----------------------------------------------------
+    # Doctor Queries
     {
         "question": "List all doctors and their specializations",
         "sql": "SELECT name, specialization FROM doctors",
@@ -63,7 +61,7 @@ SEED_PAIRS: list[dict[str, str]] = [
         "sql": "SELECT * FROM doctors WHERE specialization = 'Cardiology'",
     },
 
-    # ---- Appointment Queries -----------------------------------------------
+    # Appointment Queries
     {
         "question": "Show me appointments for last month",
         "sql": "SELECT * FROM appointments WHERE appointment_date >= date('now', '-1 month')",
@@ -80,7 +78,7 @@ SEED_PAIRS: list[dict[str, str]] = [
         ),
     },
 
-    # ---- Financial Queries -------------------------------------------------
+    # Financial Queries
     {
         "question": "What is the total revenue?",
         "sql": "SELECT SUM(total_amount) AS total_revenue FROM invoices WHERE status = 'Paid'",
@@ -100,7 +98,7 @@ SEED_PAIRS: list[dict[str, str]] = [
         ),
     },
 
-    # ---- Time-Based / Trend Queries ----------------------------------------
+    # Time-Based / Trend Queries
     {
         "question": "Show monthly appointment count for past 6 months",
         "sql": (

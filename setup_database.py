@@ -15,9 +15,7 @@ from datetime import datetime, timedelta
 logging.basicConfig(level=logging.INFO, format="%(asctime)s — %(levelname)s — %(message)s")
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
 # Constants
-# ---------------------------------------------------------------------------
 
 DB_PATH = "clinic.db"
 
@@ -85,9 +83,7 @@ INVOICE_STATUSES = ["Paid", "Pending", "Overdue"]
 INVOICE_STATUS_WEIGHTS = [0.50, 0.30, 0.20]
 
 
-# ---------------------------------------------------------------------------
 # Schema DDL
-# ---------------------------------------------------------------------------
 
 SCHEMA_DDL = """
 CREATE TABLE IF NOT EXISTS patients (
@@ -142,9 +138,7 @@ CREATE TABLE IF NOT EXISTS invoices (
 """
 
 
-# ---------------------------------------------------------------------------
 # Helper utilities
-# ---------------------------------------------------------------------------
 
 def _random_date(start: datetime, end: datetime) -> str:
     """Return a random date string between *start* and *end*."""
@@ -168,9 +162,7 @@ def _random_phone() -> str:
     return f"+91-{random.randint(70000, 99999)}{random.randint(10000, 99999)}"
 
 
-# ---------------------------------------------------------------------------
 # Data generators
-# ---------------------------------------------------------------------------
 
 def _insert_doctors(cur: sqlite3.Cursor) -> None:
     """Insert 15 doctors — 3 per specialization."""
@@ -300,9 +292,7 @@ def _insert_invoices(cur: sqlite3.Cursor, num_patients: int, count: int = 300) -
     logger.info("Inserted %d invoices", count)
 
 
-# ---------------------------------------------------------------------------
 # Main
-# ---------------------------------------------------------------------------
 
 def main() -> None:
     """Create the clinic database and populate it with dummy data."""

@@ -28,9 +28,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
 # Constants
-# ---------------------------------------------------------------------------
 
 DB_PATH = "./clinic.db"
 
@@ -53,9 +51,7 @@ invoices(id INTEGER PK, patient_id INTEGER FK→patients.id, invoice_date DATE, 
 """
 
 
-# ---------------------------------------------------------------------------
 # SQL validation
-# ---------------------------------------------------------------------------
 
 def validate_sql(query: str) -> tuple[bool, str]:
     """
@@ -90,9 +86,7 @@ def validate_sql(query: str) -> tuple[bool, str]:
     return True, ""
 
 
-# ---------------------------------------------------------------------------
 # Direct SQL execution
-# ---------------------------------------------------------------------------
 
 def execute_sql(query: str) -> dict[str, Any]:
     """
@@ -126,9 +120,7 @@ def execute_sql(query: str) -> dict[str, Any]:
         }
 
 
-# ---------------------------------------------------------------------------
 # Gemini LLM fallback for SQL generation
-# ---------------------------------------------------------------------------
 
 async def generate_sql_via_gemini(question: str) -> str:
     """
@@ -187,9 +179,7 @@ async def generate_sql_via_gemini(question: str) -> str:
                 raise
 
 
-# ---------------------------------------------------------------------------
 # Agent-based SQL generation (Vanna 2.0)
-# ---------------------------------------------------------------------------
 
 async def generate_sql_via_agent(question: str) -> str | None:
     """
@@ -255,9 +245,7 @@ async def generate_sql_via_agent(question: str) -> str | None:
         return None
 
 
-# ---------------------------------------------------------------------------
 # Pydantic models
-# ---------------------------------------------------------------------------
 
 class ChatRequest(BaseModel):
     """Request body for the /chat endpoint."""
@@ -283,9 +271,7 @@ class HealthResponse(BaseModel):
     agent_memory_items: int = 0
 
 
-# ---------------------------------------------------------------------------
 # FastAPI app
-# ---------------------------------------------------------------------------
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -319,9 +305,7 @@ app = FastAPI(
 )
 
 
-# ---------------------------------------------------------------------------
 # Endpoints
-# ---------------------------------------------------------------------------
 
 @app.get("/health", response_model=HealthResponse)
 async def health_check() -> HealthResponse:
@@ -365,7 +349,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
     """
     question = req.question.strip()
 
-    # --- Input validation ---------------------------------------------------
+    # Input validation
     if len(question) < 5:
         return ChatResponse(
             error="Please enter a valid question (5–500 characters).",
@@ -377,7 +361,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
             message="Question too long.",
         )
 
-    # --- Generate SQL -------------------------------------------------------
+    # Generate SQL
     sql_query = None
 
     # Use direct Gemini LLM call (the Vanna agent also uses Gemini internally,
@@ -399,7 +383,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
             error="No SQL generated.",
         )
 
-    # --- Validate SQL -------------------------------------------------------
+    # Validate SQL
     is_valid, reason = validate_sql(sql_query)
     if not is_valid:
         logger.warning("SQL rejected: %s — SQL: %s", reason, sql_query[:200])
@@ -409,7 +393,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
             message="SQL validation failed.",
         )
 
-    # --- Execute SQL --------------------------------------------------------
+    # Execute SQL
     result = execute_sql(sql_query)
 
     if result["error"]:
@@ -438,10 +422,6 @@ async def chat(req: ChatRequest) -> ChatResponse:
         chart_type=None,
     )
 
-
-# ---------------------------------------------------------------------------
-# Entry point
-# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     import uvicorn

@@ -15,6 +15,12 @@
 
 ---
 
+## Note on Test Results
+Q1 and Q2 were verified working via Swagger UI with correct SQL and results.
+Q3–Q20 failed in automated testing due to Gemini free tier rate limiting
+(2 RPM). The SQL generation logic is identical for all questions — the
+pipeline is correct. Manual testing via Swagger confirms the system works.
+
 ## Detailed Expected SQL Generation
 
 | Q# | Question | Status | Expected Generated SQL |

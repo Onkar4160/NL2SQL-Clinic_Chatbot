@@ -31,17 +31,13 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
 # Constants
-# ---------------------------------------------------------------------------
 
 DB_PATH = "./clinic.db"
 GEMINI_MODEL = "gemini-2.5-flash"
 
 
-# ---------------------------------------------------------------------------
 # User resolver — single default "Clinic User" with admin+user access
-# ---------------------------------------------------------------------------
 
 class DefaultUserResolver(UserResolver):
     """Always resolves to a default clinic staff user with full access."""
@@ -55,9 +51,7 @@ class DefaultUserResolver(UserResolver):
         )
 
 
-# ---------------------------------------------------------------------------
 # Singleton agent
-# ---------------------------------------------------------------------------
 
 _agent: Agent | None = None
 _agent_memory: DemoAgentMemory | None = None
@@ -88,7 +82,7 @@ def get_agent() -> Agent:
     if _agent is not None:
         return _agent
 
-    # --- Step 1: LLM Service ------------------------------------------------
+    # Step 1: LLM Service 
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise EnvironmentError(
@@ -98,11 +92,11 @@ def get_agent() -> Agent:
     llm_service = GeminiLlmService(model=GEMINI_MODEL, api_key=api_key)
     logger.info("LLM service configured: %s", GEMINI_MODEL)
 
-    # --- Step 2: SQL Runner --------------------------------------------------
+    # Step 2: SQL Runner
     sql_runner = SqliteRunner(database_path=DB_PATH)
     logger.info("SQLite runner configured: %s", DB_PATH)
 
-    # --- Step 3: Tool Registry -----------------------------------------------
+    # Step 3: Tool Registry
     tools = ToolRegistry()
 
     # Core tools
@@ -130,13 +124,13 @@ def get_agent() -> Agent:
     )
     logger.info("Registered 5 tools in ToolRegistry")
 
-    # --- Step 4: Agent Memory ------------------------------------------------
+    # Step 4: Agent Memory
     agent_memory = get_agent_memory()
 
-    # --- Step 5: User Resolver -----------------------------------------------
+    # Step 5: User Resolver
     user_resolver = DefaultUserResolver()
 
-    # --- Step 6: Agent -------------------------------------------------------
+    # Step 6: Agent
     _agent = Agent(
         llm_service=llm_service,
         tool_registry=tools,
